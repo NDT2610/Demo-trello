@@ -16,14 +16,11 @@ class Board extends Component {
     this.setState({ addingList: !this.state.addingList });
 
   handleDragEnd = ({ source, destination, type }) => {
-    // dropped outside the allowed zones
     if (!destination) return;
 
     const { dispatch } = this.props;
 
-    // Move list
     if (type === "COLUMN") {
-      // Prevent update if nothing has changed
       if (source.index !== destination.index) {
         dispatch({
           type: "MOVE_LIST",
@@ -36,7 +33,6 @@ class Board extends Component {
       return;
     }
 
-    // Move card
     if (
       source.index !== destination.index ||
       source.droppableId !== destination.droppableId

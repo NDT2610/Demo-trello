@@ -10,6 +10,7 @@
   font-size: 15px;
   overflow-wrap: break-word;
   min-height: 18px;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .Card:hover {
@@ -42,4 +43,17 @@
 .Card-Icon:hover {
   opacity: 1;
   background: rgba(220, 220, 220, 1);
+}
+.tittle-card{
+  text-align:left;
+  border: none;
+  background: #fff;
+  font-size: 20px;
+}
+.content-card{
+  color: #fff;
+  text-align:left;
+  border: none;
+  background:   #274d72;
+  font-size: 18px;
 }

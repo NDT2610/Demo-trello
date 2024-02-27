@@ -24,14 +24,14 @@ class Card extends Component {
 
   endEditing = () => this.setState({ hover: false, editing: false });
 
-  editCard = async text => {
+  editCard = async (text, content) => {
     const { card, dispatch } = this.props;
 
     this.endEditing();
 
     dispatch({
       type: "CHANGE_CARD_TEXT",
-      payload: { cardId: card._id, cardText: text }
+      payload: { cardId: card._id, cardText: text, cardContent: content}
     });
   };
 
@@ -69,8 +69,17 @@ class Card extends Component {
                   </div>
                 </div>
               )}
-
-              {card.text}
+                <div className="tittle-card">
+                  {card.text}
+                  <div className="content-card">
+                    <p>
+                    {card.content}
+                    </p>
+                    
+                </div>
+                <br />
+                
+                </div>
             </div>
           )}
         </Draggable>
@@ -79,6 +88,7 @@ class Card extends Component {
       return (
         <CardEditor
           text={card.text}
+          content={card.content}
           onSave={this.editCard}
           onDelete={this.deleteCard}
           onCancel={this.endEditing}

@@ -103,8 +103,8 @@ const cardsById = (state = {}, action) => {
       return { ...state, [cardId]: { text: cardText, _id: cardId } };
     }
     case "CHANGE_CARD_TEXT": {
-      const { cardText, cardId } = action.payload;
-      return { ...state, [cardId]: { ...state[cardId], text: cardText } };
+      const {cardContent, cardText, cardId } = action.payload;
+      return { ...state, [cardId]: { ...state[cardId], text: cardText, content: cardContent } };
     }
     case "DELETE_CARD": {
       const { cardId } = action.payload;
@@ -130,14 +130,15 @@ const reducers = combineReducers({
   listsById,
   cardsById
 });
+
 const saveState = state => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem("state", serializedState);
   } catch {
-    // ignore write errors
   }
 };
+
 const loadState = () => {
   try {
     const serializedState = localStorage.getItem("state");
@@ -149,6 +150,7 @@ const loadState = () => {
     return undefined;
   }
 };
+
 const persistedState = loadState();
 const store = createStore(reducers, persistedState);
 
