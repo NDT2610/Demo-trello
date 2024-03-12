@@ -1,6 +1,7 @@
 import { combineReducers, createStore } from "redux";
 import throttle from "lodash.throttle";
 import seed from "./seed";
+import axios from 'axios'
 
 const board = (state = { lists: [] }, action) => {
   switch (action.type) {
@@ -122,48 +123,47 @@ const cardsById = (state = {}, action) => {
     }
     default:
       return state;
-  }
+  };
 };
 
 const reducers = combineReducers({
   board,
   listsById,
-  cardsById
+  cardsById,
 });
 
-const saveState = state => {
+const saveStateToDatabase = async state => {
   try {
-    const serializedState = JSON.stringify(state);
-    localStorage.setItem("state", serializedState);
-  } catch {
+    await axios.post('http://localhost:8000/api/saveState', { state });
+  } catch (error) {
+    console.error('Error saving state to database:', error);
   }
 };
 
-const loadState = () => {
+const loadStateFromDatabase = async () => {
   try {
-    const serializedState = localStorage.getItem("state");
-    if (serializedState === null) {
-      return undefined;
-    }
-    return JSON.parse(serializedState);
-  } catch (err) {
+    const response = await axios.get('http://localhost:8000/api/loadState');
+    const loadedState = response.data.state;
+    return loadedState;
+  } catch (error) {
+    console.error('Error loading state from database:', error);
     return undefined;
   }
 };
+ 
 
-const persistedState = loadState();
-const store = createStore(reducers, persistedState);
+  const persistedState = await loadStateFromDatabase();
+  const store = createStore(reducers, persistedState);
 
-store.subscribe(
-  throttle(() => {
-    saveState(store.getState());
-  }, 1000)
-);
+  store.subscribe(
+    throttle(() => {
+      saveStateToDatabase(store.getState());
+    }, 1000)
+  );
+  console.log(store.getState());
 
-console.log(store.getState());
-if (!store.getState().board.lists.length) {
-  console.log("SEED");
-  seed(store);
-}
+  if (!store.getState().board.lists.length) {
+    seed(store);
+  }
 
 export default store;

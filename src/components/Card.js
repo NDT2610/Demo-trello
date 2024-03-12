@@ -74,8 +74,7 @@ class Card extends Component {
                   <div className="content-card">
                     <p>
                     {card.content}
-                    </p>
-                    
+                    </p>    
                 </div>
                 <br />
                 

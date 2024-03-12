@@ -3,9 +3,10 @@ import "../styles/Board.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-
 import List from "./List";
 import AddList from "./AddList";
+import NavBar from  "./NavBar";
+
 
 class Board extends Component {
   state = {
@@ -54,7 +55,11 @@ class Board extends Component {
     const { addingList } = this.state;
 
     return (
-      <DragDropContext onDragEnd={this.handleDragEnd}>
+      <>
+          <div className="Header">
+          <NavBar />
+        </div>
+        <DragDropContext onDragEnd={this.handleDragEnd}>
         <Droppable droppableId="board" direction="horizontal" type="COLUMN">
           {(provided, _snapshot) => (
             <div className="Board" ref={provided.innerRef}>
@@ -80,6 +85,8 @@ class Board extends Component {
           )}
         </Droppable>
       </DragDropContext>
+      </>
+      
     );
   }
 }
